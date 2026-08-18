@@ -59,7 +59,10 @@
     if (pdfName) {
       // Use the full path passed in via ?pdf=
       const pdfPath = pdfName;
-      document.getElementById('pdfFrame').src = pdfPath;
+      // Hide the PDF viewer toolbar (which includes the download button)
+      // for folders 5_PDFs and 6_PDFs.
+      const hideDownload = /^(5_PDFs|6_PDFs)\//i.test(pdfPath);
+      document.getElementById('pdfFrame').src = hideDownload ? pdfPath + '#toolbar=0' : pdfPath;
     } else {
       document.getElementById('pdfFrame').style.display = 'none';
       document.getElementById('error').style.display = 'block';
