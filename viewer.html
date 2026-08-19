@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Keeps this page out of search engines and web archives. The PDFs
+       still have to be publicly reachable for the Qualtrics iframe, so
+       this can't restrict who can load them -- it just stops Google/Bing/
+       the Wayback Machine from crawling and permanently caching them. -->
+  <meta name="robots" content="noindex, nofollow, noarchive">
   <title>Paper Viewer</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,6 +33,15 @@
       color: #2a5298;
     }
 
+    #notice {
+      background: #fff8e6;
+      border-bottom: 1px solid #e6d9a8;
+      color: #6b5a1e;
+      font-size: 0.8rem;
+      padding: 0.4rem 1rem;
+      text-align: center;
+    }
+
     iframe {
       flex: 1;
       width: 100%;
@@ -35,7 +49,11 @@
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
+
+<div id="notice">
+  For research purposes only &mdash; not for redistribution.
+</div>
 
 <div id="error">
   <p>No PDF specified or PDF could not be loaded.</p>
@@ -57,16 +75,36 @@
     const pdfName = params.get('pdf');
 
     if (pdfName) {
+<<<<<<< Updated upstream
       // Use the full path passed in via ?pdf=
       const pdfPath = pdfName;
       // Hide the PDF viewer toolbar (which includes the download button)
       // for folders 5_PDFs and 6_PDFs.
       const hideDownload = /^(5_PDFs|6_PDFs)\//i.test(pdfPath);
       document.getElementById('pdfFrame').src = hideDownload ? pdfPath + '#toolbar=0' : pdfPath;
+=======
+      // #toolbar=0&navpanes=0 hides the built-in download/print controls
+      // in Chrome/Edge's native PDF viewer. Firefox and Safari mostly
+      // ignore this fragment, and Ctrl/Cmd+S still works everywhere --
+      // this is a deterrent against casual saving, not real protection.
+      // The PDF URL itself is still public and directly fetchable, since
+      // it has to be for the Qualtrics iframe to load it.
+      document.getElementById('pdfFrame').src = pdfName + '#toolbar=0&navpanes=0';
+>>>>>>> Stashed changes
     } else {
       document.getElementById('pdfFrame').style.display = 'none';
       document.getElementById('error').style.display = 'block';
     }
+
+    // Deterrent against casual save/print via keyboard shortcut. A
+    // determined visitor can still bypass this (devtools, extensions,
+    // OS-level print-to-PDF, requesting the PDF URL directly, etc).
+    window.addEventListener('keydown', function (e) {
+      const key = e.key ? e.key.toLowerCase() : '';
+      if ((e.ctrlKey || e.metaKey) && (key === 's' || key === 'p')) {
+        e.preventDefault();
+      }
+    });
   </script>
 
 </body>
