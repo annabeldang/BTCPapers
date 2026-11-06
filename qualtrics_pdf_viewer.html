@@ -6,7 +6,7 @@ Qualtrics.SurveyEngine.addOnload(function() {
         var selected = that.getSelectedChoices();
         if (!selected || selected.length === 0) return;
 
-        var choseLeft = (selected[0] === '1');  // Choice 1 = Abstract A (left)
+        var choseLeft = (selected[0] === '1');  // Choice 1 = Paper A (left)
 
         var sideAssign = Qualtrics.SurveyEngine.getJSEmbeddedData('side_' + round);
         var btOnLeft   = (sideAssign === 'bt_left');
@@ -19,8 +19,8 @@ Qualtrics.SurveyEngine.addOnload(function() {
 
         var baseURL = 'https://annabeldang.github.io/BTCPapers/';
 
-        // Full PDFs: 5_PDFs = pdf_001–050 (BT), 6_PDFs = pdf_051–100 (ST)
-        var folder  = choseBT ? '5_PDFs' : '6_PDFs';
+        // Full PDFs: 9_PDFs = pdf_001–050 (BT), 10_PDFs = pdf_051–100 (ST)
+        var folder  = choseBT ? '9_PDFs' : '10_PDFs';
         var pdfNum  = choseBT ? parseInt(chosenNum, 10) : parseInt(chosenNum, 10) + 50;
         var fullURL = baseURL + 'viewer.html?pdf=' + folder + '/pdf_' + String(pdfNum).padStart(3, '0') + '.pdf';
 

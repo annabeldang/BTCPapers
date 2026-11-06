@@ -5,8 +5,9 @@ Qualtrics.SurveyEngine.addOnload(function() {
     // -----------------------------------------------------
     // 1. Get condition and build folder paths
     var condition = '${e://Field/condition}';
-    var btFolder  = (condition === 'team_shown') ? '3_PDFs' : '1_PDFs';
-    var stFolder  = (condition === 'team_shown') ? '4_PDFs' : '2_PDFs';
+    // Folders 1-4 are labeled "Paper A" (left side); 5-8 are the same files labeled "Paper B" (right side)
+    var btFolderNum = (condition === 'team_shown') ? 3 : 1;
+    var stFolderNum = (condition === 'team_shown') ? 4 : 2;
 
     // ---- CHANGE base URL to GitHub Pages URL ----
     var baseURL = 'https://annabeldang.github.io/BTCPapers/';
@@ -57,15 +58,14 @@ Qualtrics.SurveyEngine.addOnload(function() {
     stNumber = stPick + 50;
 	}
 
-	var btURL = baseURL + 'viewer.html?pdf=' + btFolder +
-    '/abstract_' + String(btNumber).padStart(3, '0') + '.pdf';
+	function abstractURL(folderNum, number) {
+	    return baseURL + 'viewer.html?pdf=' + folderNum + '_PDFs' +
+	        '/abstract_' + String(number).padStart(3, '0') + '.pdf';
+	}
 
-	var stURL = baseURL + 'viewer.html?pdf=' + stFolder +
-    '/abstract_' + String(stNumber).padStart(3, '0') + '.pdf';
-
-    // 8. Assign URLs to left and right iframes
-    var leftURL  = btOnLeft ? btURL : stURL;
-    var rightURL = btOnLeft ? stURL : btURL;
+    // 8. Assign URLs to left (Paper A, folders 1-4) and right (Paper B, folders 5-8) iframes
+    var leftURL  = btOnLeft ? abstractURL(btFolderNum, btNumber)     : abstractURL(stFolderNum, stNumber);
+    var rightURL = btOnLeft ? abstractURL(stFolderNum + 4, stNumber) : abstractURL(btFolderNum + 4, btNumber);
 
     document.getElementById('left-frame').src  = leftURL;
     document.getElementById('right-frame').src = rightURL;
